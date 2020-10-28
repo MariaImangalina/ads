@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Для продолжения работы, пожалуйста, авторизуйтесь:</h1>
+
+<form method='POST' action="{% url 'account:login' %}">
+    {% scrf_token %}
+    {% form.as_p %}
+
+    <input type="submit" value='Login'>
+    <input type="hidden" name='next' value='{{next_page}}'>
+</form>
+
+{% if form.errors %}
+<p>Указанные данные не верны. Попробуйте еще раз.</p>
+{% endif %}
+
+<p>Если Вы еще не с нами, зарегистрироваться можно <a href=#>здесь</a></p>
+
+
+{% endblock %}
