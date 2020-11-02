@@ -1,8 +1,7 @@
-from django.forms import ModelForm
+from django import forms
 from .models import Polygon
 
-class PolygonForm(ModelForm):
-
+class PolygonForm(forms.ModelForm):
     class Meta:
         model = Polygon
         fields = ('name', 'coordinates')

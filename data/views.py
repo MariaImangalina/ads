@@ -9,4 +9,4 @@ def add_polygon(request):
     if request.method == 'POST':
         print('works!')
 
-    return render(request, 'index.html', {'form':form})
+    return render(request, 'data/map.html', {'form':form})
