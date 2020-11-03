@@ -53,13 +53,15 @@ mymap.addLayer(editableLayers);
 
 
 // Get coordinates from polygon
+var polygonCoordinates
 mymap.on('draw:created', function(e) {
   var type = e.layerType,
     layer = e.layer;
 
   if (type === 'polygon') {
-    var polygonCoordinates = layer._latlngs;
+    polygonCoordinates = layer._latlngs;
     console.log(polygonCoordinates);
+
   }
 
   editableLayers.addLayer(layer);
@@ -67,14 +69,13 @@ mymap.on('draw:created', function(e) {
 
   mymap.addEventListener('draw:created', function openForm() {
     document.getElementById("polygon_form").style.display = "block";  
-  }
-  )
+  });
 
 // popup window
 
 function closeForm() {
     document.getElementById("polygon_form").style.display = "none";
-  }
+  };
 
 // ajax request
 
@@ -85,10 +86,17 @@ function closeForm() {
 
     $.ajax({
       type: 'POST',
-      url: "{% url 'home' %}",
+      url: "{% url 'add_polygon' %}",
       data: {
         'name': name.value,
-        'coordinates': coordinates.value,
-      }
+        'coordinates': polygonCoordinates,
+      },
+      success: function(response) {
+        console.log(response)
+      },
+      error: function(error) {
+        console.log(error)
+      },
+
     })
   })
