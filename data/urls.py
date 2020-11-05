@@ -6,5 +6,5 @@ from .views import add_polygon
 app_name = 'data'
 
 urlpatterns = [
-    path('map/', add_polygon, name='add_polygon'),
+    path('map/', add_polygon, name='map'),
 ]

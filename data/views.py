@@ -7,10 +7,16 @@ def add_polygon(request):
     form = PolygonForm()
 
     if request.is_ajax and request.method == 'POST':
-        form = PolygonForm(request.POST)
+        formset = PolygonForm(request.POST)
+        print('works here')
 
-        if form.is_valid():
+        if formset.is_valid():
+            polygon = formset.save(commit=False)
+            polygon.user = request.user
+            polygon.save()
             print('works!')
+        else:
+            print(formset.errors)
 
 
     return render(request, 'data/map.html', {'form':form})

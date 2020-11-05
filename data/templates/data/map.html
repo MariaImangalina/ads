@@ -27,11 +27,11 @@
 
 <div class='container'>
   <div class='row'>
-    <div id="mapid" class='col-lg-8'></div>
+    <div id="mapid" style='height: 900px' class='col-lg-8'></div>
 
 
     <div class='col-lg-4'>
-      <div class='form-popup' id='polygon_form'>
+      <div class='form-popup' id='polygon_form' style="display: none;">
       <form action="" method="POST" class='form-container'>
       {% csrf_token %}
       {{ form.as_p }}

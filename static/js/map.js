@@ -59,7 +59,7 @@ mymap.on('draw:created', function(e) {
     layer = e.layer;
 
   if (type === 'polygon') {
-    polygonCoordinates = layer._latlngs;
+    polygonCoordinates = layer._latlngs.toString();
     console.log(polygonCoordinates);
 
   }
@@ -67,11 +67,13 @@ mymap.on('draw:created', function(e) {
   editableLayers.addLayer(layer);
 });
 
-  mymap.addEventListener('draw:created', function openForm() {
-    document.getElementById("polygon_form").style.display = "block";  
-  });
 
 // popup window
+
+mymap.addEventListener('draw:created', function openForm() {
+  document.getElementById("polygon_form").style.display = "block";  
+});
+
 
 function closeForm() {
     document.getElementById("polygon_form").style.display = "none";
@@ -79,24 +81,27 @@ function closeForm() {
 
 // ajax request
 
-  pol_form = document.getElementById("polygon_form");
-  pol_form.addEventListener('submit', (e) => {
-    e.preventDefault()
-    console.log('submitted')
+$('#polygon_form').on('submit', (e) => {
+  e.preventDefault()
+  console.log('submitted')
+  url = '/data/map/'
 
-    $.ajax({
-      type: 'POST',
-      url: "{% url 'add_polygon' %}",
-      data: {
-        'name': name.value,
-        'coordinates': polygonCoordinates,
-      },
-      success: function(response) {
-        console.log(response)
-      },
-      error: function(error) {
-        console.log(error)
-      },
+var csrf = document.getElementsByName('csrfmiddlewaretoken')
 
-    })
+  $.ajax({
+    type: 'POST',
+    url: url,
+    data: {
+      name : name.value,
+      csrfmiddlewaretoken : csrf[0].value,
+      coordinates: polygonCoordinates,
+    },
+    success: function(response) {
+      console.log('it works')
+        },
+    error: function(error) {
+      console.log(error)
+    },
+
   })
+})
