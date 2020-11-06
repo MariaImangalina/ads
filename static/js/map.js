@@ -92,7 +92,7 @@ var csrf = document.getElementsByName('csrfmiddlewaretoken')
     type: 'POST',
     url: url,
     data: {
-      name : name.value,
+      name : id_name.value,
       csrfmiddlewaretoken : csrf[0].value,
       coordinates: polygonCoordinates,
     },
