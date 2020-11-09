@@ -85,8 +85,7 @@ $('#polygon_form').on('submit', (e) => {
   e.preventDefault()
   console.log('submitted')
   url = '/data/map/'
-
-var csrf = document.getElementsByName('csrfmiddlewaretoken')
+  var csrf = document.getElementsByName('csrfmiddlewaretoken')
 
   $.ajax({
     type: 'POST',
@@ -97,11 +96,12 @@ var csrf = document.getElementsByName('csrfmiddlewaretoken')
       coordinates: polygonCoordinates,
     },
     success: function(response) {
-      console.log('it works')
-        },
+      console.log('it works');
+      alert('Полигон сохранен!');
+      $('#pol_form')[0].reset();
+    },
     error: function(error) {
       console.log(error)
     },
-
-  })
-})
+  });
+});
