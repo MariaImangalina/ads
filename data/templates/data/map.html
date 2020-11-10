@@ -21,14 +21,16 @@
 
 <div class='container'>
   <div class='row'>
-    <div id="mapid" style='height: 900px' class='col-lg-8'></div>
+    <div id="mapid" style='height: 600px' class='col-lg-8'></div>
 
 
     <div class='col-lg-4'>
+      <br>
       <div class='form-popup' id='polygon_form' style="display: none;">
       <form action="" id='pol_form' method="POST" class='form-container'>
-      {% csrf_token %}
-      {{ form.as_p }}
+        <label for="form.name">Сохранить полигон? </label>
+        {% csrf_token %}
+        {{ form|crispy }}
       <br>
       <input type="submit" class='btn btn-primary' value='Сохранить'>
       <button type='submit' class='btn btn-secondary cancel' onclick='closeForm()'>Отмена</button>
