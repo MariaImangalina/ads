@@ -1,6 +1,7 @@
 from celery import shared_task
 from django.core.mail import EmailMessage
 import datetime
+from django.contrib.auth import get_user_model
 
 import psycopg2
 import pandas as pd
@@ -8,6 +9,7 @@ from ads.secret import db_user, db_password
 
 from .models import Polygon
 
+User = get_user_model()
 
 @shared_task 
 def get_df():
@@ -35,8 +37,6 @@ def get_df():
 
 
 @shared_task 
-def send_df():
-    msg = EmailMessage(f'Объявления на полигоне', 'что-то', '', 'varenik_geo@mail.ru')
-    msg.content_subtype = "html"
-    msg.send(fail_silently=False)
-    return None
+def check_active():
+    for user in User.objects.all():
+        user.activate()

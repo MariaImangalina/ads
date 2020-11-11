@@ -132,7 +132,7 @@ MEDIA_URL = '/media/'
 
 
 #______________CELERY________________
-
+from celery.schedules import crontab
 
 CELERY_BROKER_URL = 'amqp://localhost'
 
@@ -143,6 +143,10 @@ CELERY_BEAT_SCHEDULE = {
  'test2': {
      'task': 'data.tasks.get_df',
      'schedule': 300.0,
+ },
+ 'activity': {
+     'task': 'data.tasks.check_active',
+     'schedule': crontab(hour=20, minute=0),
  }
     }
 
