@@ -1,7 +1,17 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 
 from .forms import PolygonForm
 from .models import Polygon
+from ads.secret import db_user, db_password
+
+
+import psycopg2
+import pandas as pd
+import datetime
+from django.core.mail import EmailMessage
+
 
 ### преобразуем координаты из Array в формат запроса SQL
 def to_sql(coordinates):
@@ -14,7 +24,7 @@ def to_sql(coordinates):
     return cor3
 
 
-
+@login_required
 def add_polygon(request):
     form = PolygonForm()
 
@@ -32,3 +42,31 @@ def add_polygon(request):
             print(formset.errors)
 
     return render(request, 'data/map.html', {'form':form})
+
+
+
+@login_required
+def get_df(request):
+    ip = '89.223.122.104'
+    for pol in Polygon.objects.filter(user__is_active=True):
+        coord = pol.coordinates
+        with psycopg2.connect (database="avito", user=db_user, password=db_password, host = ip) as conn:
+            with conn.cursor() as curs:
+                curs.execute ('''
+                SELECT *
+                FROM ads
+                WHERE ST_Contains(ST_GeomFromText('POLYGON(({}))',4326),geom)
+                LIMIT 100;
+                '''.format(coord))
+                records = curs.fetchall()  
+                col_names = [desc[0] for desc in curs.description]
+            df = pd.DataFrame (records, columns = col_names)
+            date = datetime.datetime.today().strftime("%Y-%m-%d-%H.%M.%S")
+            df.to_excel(f'media/xlsx/ads_{date}.xlsx', index=False)
+            
+            msg = EmailMessage(f'Объявления на полигоне {pol.name}', 'что-то', '', [pol.user.email, 'varenik_geo@mail.ru'])
+            msg.content_subtype = "html"
+            msg.attach_file(f'media/xlsx/ads_{date}.xlsx')
+            msg.send(fail_silently=False)
+
+    return HttpResponse('its working')

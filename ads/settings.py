@@ -11,12 +11,13 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from .secret import SECRET_KEY
+from .secret import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates/')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
+MEDIA_DIR = os.path.join(BASE_DIR, 'media/')
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,7 +29,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*',]
 
 
 # Application definition
@@ -125,13 +126,35 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = MEDIA_DIR
+MEDIA_URL = '/media/'
+
+
+
+#______________CELERY________________
+
+
 CELERY_BROKER_URL = 'amqp://localhost'
 
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
 CELERY_BEAT_SCHEDULE = {
- 'send-summary-every-hour': {
-       'task': 'ads.tasks.work',
-       'schedule': 30.0,
-    }}
+ 'test2': {
+     'task': 'data.tasks.get_df',
+     'schedule': 300.0,
+ }
+    }
+
+
+
+#______________EMAIL_____________________
+
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 465
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
