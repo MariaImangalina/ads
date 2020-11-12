@@ -1,22 +1,23 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
 <h1>Для продолжения работы, пожалуйста, авторизуйтесь:</h1>
 
 <form method='POST' action="{% url 'account:login' %}">
-    {% scrf_token %}
-    {% form.as_p %}
-
-    <input type="submit" value='Login'>
+    {% csrf_token %}
+    {{ form|crispy }}
+<br>
+    <input type="submit" class='btn btn-primary' value='Login'>
     <input type="hidden" name='next' value='{{next_page}}'>
 </form>
+<br>
 
 {% if form.errors %}
 <p>Указанные данные не верны. Попробуйте еще раз.</p>
 {% endif %}
 
-<p>Если Вы еще не с нами, зарегистрироваться можно <a href=#>здесь</a></p>
-
+<p>Если Вы еще не с нами, зарегистрироваться можно <a href="{% url 'account:signup' %}">здесь</a></p>
 
 {% endblock %}

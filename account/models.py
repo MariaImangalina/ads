@@ -1,15 +1,19 @@
 from django.db import models
 from django.contrib import auth
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from datetime import timedelta, date
 
-class User(auth.models.User, auth.models.PermissionsMixin):
-    is_active = models.BooleanField(default=False, verbose_name='status'),
+User = auth.get_user_model()
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     expiration_date = models.DateField(default=0)
 
     def __str__(self):
-        return self.username
-
+        return self.user.username
 
     def activated(self):
         if self.expiration_date >= date.today():
@@ -26,5 +30,4 @@ class User(auth.models.User, auth.models.PermissionsMixin):
         else:
             self.expiration_date = date.today() + add_time
         self.save()
-
 
