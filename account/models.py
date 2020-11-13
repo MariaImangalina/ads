@@ -23,7 +23,7 @@ class UserProfile(models.Model):
             self.paid = False
         self.save()
         
-
+#возможно, понадобится потом для расширения админки
     def prolong(self, add_months):
         add_time = timedelta(days=31)*add_months
         if self.expiration_date:

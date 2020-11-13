@@ -96,9 +96,10 @@ $('#polygon_form').on('submit', (e) => {
       coordinates: polygonCoordinates,
     },
     success: function(response) {
-      console.log('it works');
       alert('Полигон сохранен!');
       $('#pol_form')[0].reset();
+      editableLayers.clearLayers()
+
     },
     error: function(error) {
       console.log(error)

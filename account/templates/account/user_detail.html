@@ -4,12 +4,42 @@
 
 
 <h1>{{ user.username }}</h1>
-<span>{{ user.expiration_date}}</span>
+<br>
+<br>
 
-<ul></ul>
-{% for pol in user.polygon.all %}
-    <p>{{ pol.name }}</p>
+{% if user.userprofile.paid %}
+<h4>Текущий статус: Активен</h4>
+<br>
+<h4>Профиль активен до: {{ user.userprofile.expiration_date }}</h4>
 
-{% endfor %}
+{% else %}
+<h4>Текущий статус: Неактивен</h4>
+
+{% endif %}
+<br>
+<h4>Ваши полигоны:</h4>
+<a href="{% url 'data:map' %}" role='button' class='btn btn-primary' >Добавить полигон</a>
+<br>
+<table class='table thead-light'>
+    <thead class='thead-light'>
+        <tr>
+            <th scope='col'>#</th>
+            <th scope='col'>Название</th>
+            <th scope='col'>Координаты</th>
+            <th scope='col'></th>
+        </tr>
+    </thead>
+        {% for pol in user.polygon.all %}
+        <tr>
+            <th scope='row'>{{ forloop.counter }}</td>
+            <td>{{ pol.name }}</td>
+            <td style='overflow: scroll'>{{ pol.coordinates }}</td>
+            <td><a href='#' role='button' class='btn btn-primary'>Удалить</a></td>
+        </tr>
+        {% endfor %}
+    
+</table>
+
+
 
 {% endblock %}

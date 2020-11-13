@@ -39,4 +39,4 @@ def get_df():
 @shared_task 
 def check_active():
     for user in User.objects.all():
-        user.activate()
+        user.profile.activate()
