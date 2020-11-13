@@ -11,15 +11,16 @@ User = auth.get_user_model()
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     expiration_date = models.DateField(default=0)
+    paid = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
 
     def activated(self):
         if self.expiration_date >= date.today():
-            self.is_active = True
+            self.paid = True
         else:
-            self.is_active = False
+            self.paid = False
         self.save()
         
 
