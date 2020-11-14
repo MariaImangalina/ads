@@ -9,6 +9,15 @@ class UserProfileInline(admin.StackedInline):
 class CustomUserAdmin(UserAdmin):
     inlines = (UserProfileInline, )
 
+    list_display = ['username', 'email', 'expiration_date', 'paid']
+    
+
+    def expiration_date(self, obj):
+        return obj.profile.expiration_date
+
+    def paid(self, obj):
+        return obj.profile.paid
+
     def get_inline_instances(self, request, obj=None):
         if not obj:
             return list()

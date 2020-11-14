@@ -9,7 +9,7 @@ User = auth.get_user_model()
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     expiration_date = models.DateField(default=0)
     paid = models.BooleanField(default=False)
 
