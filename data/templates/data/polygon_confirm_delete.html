@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>
+    <h3>Вы точно хотите удалить полигон {{ polygon.name }}?</h3>
+</div>
+
+<form method='POST'>
+    {% csrf_token %}
+    <input type="submit" value='Confirm Delete' class='btn btn-danger'>
+    <a href="{% url 'account:userpage' pk=user.pk %}" class='btn btn-secondary'>Отмена</a>
+
+
+</form>
+
+
+{% endblock %}

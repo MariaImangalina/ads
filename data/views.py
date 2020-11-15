@@ -1,6 +1,11 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import get_user_model
 from django.http import HttpResponse
+from django.views import generic
+
 
 from .forms import PolygonForm
 from .models import Polygon
@@ -12,6 +17,8 @@ import pandas as pd
 import datetime
 from django.core.mail import EmailMessage
 
+
+User=get_user_model()
 
 ### преобразуем координаты из Array в формат запроса SQL
 def to_sql(coordinates):
@@ -70,3 +77,11 @@ def get_df(request):
             msg.send(fail_silently=False)
 
     return HttpResponse('its working')
+
+
+
+class DeletePolygon(LoginRequiredMixin, generic.DeleteView):
+    model = Polygon
+
+    def get_success_url(self):
+        return reverse_lazy('account:userpage', kwargs={'pk': self.object.user.pk})
