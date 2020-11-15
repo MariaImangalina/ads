@@ -5,9 +5,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.views import generic
+from django.db.models import Q
 
 
-from .forms import PolygonForm
+from .forms import PolygonForm, SearchPolygon
 from .models import Polygon
 from ads.secret import db_user, db_password
 
@@ -83,5 +84,23 @@ def get_df(request):
 class DeletePolygon(LoginRequiredMixin, generic.DeleteView):
     model = Polygon
 
-    def get_success_url(self):
-        return reverse_lazy('account:userpage', kwargs={'pk': self.object.user.pk})
+    def get_success_url(self):  #поскольку объект удаляется, просто success_url недостаточно, нет данных по нему
+        return reverse_lazy('account:userpage', kwargs={'pk': self.object.user.pk}) 
+
+
+
+#_______________поиск среди полигонов____________
+
+class SearchView(generic.ListView):
+    model = Polygon
+    template_name = 'data/search_results.html'
+
+    def get_queryset(self):
+        self.user = self.request.user
+        query = self.request.GET.get('q')
+
+        return Polygon.objects.filter(Q(name__icontains=query), user=self.user)
+
+
+
+

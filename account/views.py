@@ -21,4 +21,5 @@ class SignUp(generic.CreateView):
 class UserDetail(generic.DetailView):
     model = User
     template_name = 'account/user_detail.html'
+
     

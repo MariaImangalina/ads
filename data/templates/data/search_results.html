@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<ul>
+{% for polygon in polygon_list %}
+
+    <li>{{ polygon.name }}</li>
+
+{% endfor %}
+
+
+</ul>
+
+
+{% endblock %}
