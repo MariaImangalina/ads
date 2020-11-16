@@ -22,4 +22,13 @@ class UserDetail(generic.DetailView):
     model = User
     template_name = 'account/user_detail.html'
 
+
+class UserList(generic.ListView):
+    model = User
+    template_name = 'account/user_list.html'
+
+def check_payment(request, pk):
+    user = User.objects.get(pk=pk)
+    pass
+
     

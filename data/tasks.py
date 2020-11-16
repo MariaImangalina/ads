@@ -37,6 +37,6 @@ def get_df():
 
 
 @shared_task 
-def check_active():
+def check_payment():
     for user in User.objects.all():
-        user.profile.activate()
+        user.profile.check_paid()

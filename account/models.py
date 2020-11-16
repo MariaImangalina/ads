@@ -16,7 +16,7 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-    def activated(self):
+    def check_paid(self):
         if self.expiration_date >= date.today():
             self.paid = True
         else:

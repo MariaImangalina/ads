@@ -144,9 +144,9 @@ CELERY_BEAT_SCHEDULE = {
      'task': 'data.tasks.get_df',
      'schedule': 300.0,
  },
- 'activity': {
-     'task': 'data.tasks.check_active',
-     'schedule': crontab(hour=20, minute=0),
+ 'payment': {
+     'task': 'data.tasks.check_payment',
+     'schedule': crontab(hour=21, minute=55),
  }
     }
 

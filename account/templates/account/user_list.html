@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br>
+<table class='table thead-light'>
+
+    <thead class='thead-light'>
+        <tr>
+            <th scope='col'>#</th>
+            <th scope='col'>Username</th>
+            <th scope='col'>Exp_date</th>
+            <th scope='col'>Is Paid</th>
+            <th scope='col'></th>
+        </tr>
+    </thead>
+        {% for user in user_list %}
+        <tr>
+            <th scope='row'>{{ forloop.counter }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.profile.expiration_date }}</td>
+            <td>{{ user.profile.paid }}</td>
+            <td><a href="#" class='btn btn-info'>Check Status</a></td>
+        </tr>
+        {% endfor %}
+    
+</table>
+
+
+{% endblock %}
