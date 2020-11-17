@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth import get_user_model, login
@@ -27,8 +27,11 @@ class UserList(generic.ListView):
     model = User
     template_name = 'account/user_list.html'
 
-def check_payment(request, pk):
-    user = User.objects.get(pk=pk)
-    pass
+def check_payment(request):
+    for user in User.objects.all():
+        user.profile.check_paid()
+
+    return redirect('account:all')
+
 
     

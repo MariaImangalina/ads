@@ -4,14 +4,13 @@
 
 <br>
 <table class='table thead-light'>
-
+    <caption><a href="{% url 'account:check_payment' %}" class='btn btn-info'>Check Status</a></caption>
     <thead class='thead-light'>
         <tr>
             <th scope='col'>#</th>
             <th scope='col'>Username</th>
             <th scope='col'>Exp_date</th>
             <th scope='col'>Is Paid</th>
-            <th scope='col'></th>
         </tr>
     </thead>
         {% for user in user_list %}
@@ -20,7 +19,6 @@
             <td>{{ user.username }}</td>
             <td>{{ user.profile.expiration_date }}</td>
             <td>{{ user.profile.paid }}</td>
-            <td><a href="#" class='btn btn-info'>Check Status</a></td>
         </tr>
         {% endfor %}
     

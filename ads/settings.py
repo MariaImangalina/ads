@@ -146,7 +146,7 @@ CELERY_BEAT_SCHEDULE = {
  },
  'payment': {
      'task': 'data.tasks.check_payment',
-     'schedule': crontab(hour=21, minute=55),
+     'schedule': crontab(hour=15, minute=35),
  }
     }
 
