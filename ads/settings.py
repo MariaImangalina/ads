@@ -133,6 +133,7 @@ MEDIA_URL = '/media/'
 
 #______________CELERY________________
 from celery.schedules import crontab
+from datetime import timedelta
 
 CELERY_BROKER_URL = 'amqp://localhost'
 
@@ -142,11 +143,11 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULE = {
  'test2': {
      'task': 'data.tasks.get_df',
-     'schedule': 300.0,
+     'schedule': timedelta(hours=1),
  },
  'payment': {
      'task': 'data.tasks.check_payment',
-     'schedule': crontab(hour=15, minute=35),
+     'schedule': crontab(hour=0, minute=10),
  }
     }
 

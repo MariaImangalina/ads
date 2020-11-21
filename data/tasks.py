@@ -14,7 +14,7 @@ User = get_user_model()
 @shared_task 
 def get_df():
     ip = '89.223.122.104'
-    for pol in Polygon.objects.filter(user__is_active=True):
+    for pol in Polygon.objects.filter(user__profile__paid=True):
         coord = pol.coordinates
         with psycopg2.connect (database="avito", user=db_user, password=db_password, host = ip) as conn:
             with conn.cursor() as curs:
