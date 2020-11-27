@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -143,11 +143,11 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULE = {
  'test2': {
      'task': 'data.tasks.get_df',
-     'schedule': timedelta(hours=1),
+     'schedule': timedelta(minutes=10),
  },
  'payment': {
      'task': 'data.tasks.check_payment',
-     'schedule': crontab(hour=0, minute=10),
+     'schedule': crontab(hour=14, minute=15), #нужно указывать время UTC
  }
     }
 

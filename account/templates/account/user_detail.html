@@ -27,26 +27,43 @@
     <input type="submit" class='btn btn-primary btn-sm' value='Найти'>
 </form>
 <br>
+<div class='container'>
 <table class='table thead-light'>
     <thead class='thead-light'>
         <tr>
             <th scope='col'>#</th>
             <th scope='col'>Название</th>
-            <th scope='col'>Координаты</th>
+            <th scope='col'>Тип объявления</th>
+            <th scope='col'>Площадь MIN</th>
+            <th scope='col'>Площадь MAX</th>
+            <th scope='col'></th>
+            <th scope='col'></th>
             <th scope='col'></th>
         </tr>
     </thead>
         {% for pol in user.polygon.all %}
+ 
+        
         <tr>
             <th scope='row'>{{ forloop.counter }}</td>
-            <td>{{ pol.name }}</td>
-            <td style='overflow: scroll'>{{ pol.coordinates }}</td>
-            <td><a href="{% url 'data:remove' pk=pol.pk %}" class='btn btn-secondary'>Удалить</a></td>
+            <th>{{ pol.name }}</th>
+            <td>{{ pol.ads_type }}</td>
+            <td>{{ pol.min_area }}</td>
+            <td>{{ pol.max_area }}</td>
+
+            <td><a href="{% url 'data:update' pk=pol.pk %}" class='btn btn-primary btn-sm'>Изменить</a></td>
+            
+            <td><a href="{% url 'data:get_df_now' pk=pol.pk %}" class='btn btn-primary btn-sm'>Выгрузка</a></td>
+
+            <td><a href="{% url 'data:remove' pk=pol.pk %}" class='btn btn-secondary btn-sm'>Удалить</a></td>
         </tr>
+
         {% endfor %}
+
+
     
 </table>
-
+</div>
 
 
 {% endblock %}

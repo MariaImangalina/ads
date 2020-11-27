@@ -11,3 +11,6 @@ class PolygonForm(forms.ModelForm):
 
 class SearchPolygon(forms.Form):
     query = forms.CharField(max_length=256)
+    
+
+
