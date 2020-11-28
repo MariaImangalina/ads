@@ -60,13 +60,19 @@ def get_df(request):
     ip = '89.223.122.104'
     for pol in Polygon.objects.filter(user__is_active=True):
         coord = pol.coordinates
+        min_area = pol.min_area
+        max_area = pol.max_area
+        if pol.ads_type:
+            type_ads = pol.ads_type
+        else:
+            type_ads = '*'
         sql = '''
                 SELECT *
                 FROM ads
-                WHERE ST_Contains(ST_GeomFromText(%s,4326),geom)
+                WHERE ST_Contains(ST_GeomFromText(%s,4326),geom) AND square BETWEEN %s and %s AND type_ads = %s
                 LIMIT 100;
                 '''
-        params = ['POLYGON(({}))'.format(coord), ]
+        params = ['POLYGON(({}))'.format(coord), min_area, max_area, type_ads, ]
         with psycopg2.connect (database="avito", user=db_user, password=db_password, host = ip) as conn:
             with conn.cursor() as curs:
                 curs.execute (sql, params)
@@ -94,14 +100,23 @@ def get_df_now(request, pk):
     ip = '89.223.122.104'
     pol = Polygon.objects.get(pk=pk)
     coord = pol.coordinates
-    date = (datetime.now() - timedelta(days=31)).strftime("%Y-%m-%d %H:%M:%S")
+    min_area = pol.min_area
+    max_area = pol.max_area
+    type_ads = pol.ads_type
+    period = (datetime.now() - timedelta(days=31)).strftime("%Y-%m-%d %H:%M:%S")
+    params = ['POLYGON(({}))'.format(coord), period, min_area, max_area, ]
     sql = '''
             SELECT *
             FROM ads
-            WHERE ST_Contains(ST_GeomFromText(%s,4326),geom) AND time_ads>%s
-            LIMIT 100;
+            WHERE ST_Contains(ST_GeomFromText(%s,4326),geom) AND time_ads>%s AND square BETWEEN %s and %s
             '''
-    params = ['POLYGON(({}))'.format(coord), date]
+    if pol.ads_type:
+        sql += 'AND type_ads = %s LIMIT 50;'
+        params += [type_ads, ]
+
+    else:
+        sql += ' LIMIT 50;'
+
     with psycopg2.connect (database="avito", user=db_user, password=db_password, host = ip) as conn:
         with conn.cursor() as curs:
             curs.execute (sql, params)
@@ -110,14 +125,12 @@ def get_df_now(request, pk):
             
         df = pd.DataFrame (records, columns = col_names)
         date = datetime.today().strftime("%Y-%m-%d-%H.%M.%S")
-        df.to_excel(f'media/xlsx/ads_{date}.xlsx', index=False)
+        df.to_excel(f'media/xlsx/ads_for_{pol.name}_{date}.xlsx', index=False)
         
         msg = EmailMessage(f'Объявления на полигоне {pol.name}', 'что-то', '', [pol.user.email, 'varenik_geo@mail.ru'])
         msg.content_subtype = "html"
-        msg.attach_file(f'media/xlsx/ads_{date}.xlsx')
+        msg.attach_file(f'media/xlsx/ads_for_{pol.name}_{date}.xlsx')
         msg.send(fail_silently=False)
-
-        
 
     return redirect('account:userpage', pk=request.user.pk)
 
