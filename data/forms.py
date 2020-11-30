@@ -5,7 +5,7 @@ class PolygonForm(forms.ModelForm):
     
     class Meta:
         model = Polygon
-        fields = ('name', 'coordinates')
+        fields = ('name', 'ads_type', 'min_area', 'max_area', 'coordinates')
         widgets = {'coordinates': forms.HiddenInput()}
 
 

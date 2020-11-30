@@ -10,7 +10,7 @@ User = auth.get_user_model()
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    expiration_date = models.DateField(default=(date.today()-timedelta(days=1)))
+    expiration_date = models.DateField(default=(date.today()-timedelta(days=1))) #ПОПРАВИТЬ
     paid = models.BooleanField(default=False)
 
     def __str__(self):

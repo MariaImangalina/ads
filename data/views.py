@@ -139,7 +139,7 @@ class DeletePolygon(LoginRequiredMixin, generic.DeleteView):
         return reverse_lazy('account:userpage', kwargs={'pk': self.object.user.pk}) 
 
 
-class UpdatePolygon(generic.UpdateView, generic.detail.SingleObjectMixin):
+class UpdatePolygon(LoginRequiredMixin, generic.UpdateView, generic.detail.SingleObjectMixin):
     template_name = 'data/polygon_update.html'
     model = Polygon
     fields = ['name', 'ads_type', 'min_area', 'max_area']

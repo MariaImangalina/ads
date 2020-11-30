@@ -93,6 +93,9 @@ $('#polygon_form').on('submit', (e) => {
     data: {
       name : id_name.value,
       csrfmiddlewaretoken : csrf[0].value,
+      ads_type : id_ads_type.value, 
+      min_area : id_min_area.value,
+      max_area : id_max_area.value,
       coordinates: polygonCoordinates,
     },
     success: function(response) {
