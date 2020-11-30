@@ -10,7 +10,7 @@ User = auth.get_user_model()
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    expiration_date = models.DateField(default=0)
+    expiration_date = models.DateField(default=(date.today()-timedelta(days=1)))
     paid = models.BooleanField(default=False)
 
     def __str__(self):
@@ -22,13 +22,16 @@ class UserProfile(models.Model):
         else:
             self.paid = False
         self.save()
+
+
+
         
 #возможно, понадобится потом для расширения админки
-    def prolong(self, add_months):
-        add_time = timedelta(days=31)*add_months
-        if self.expiration_date:
-            self.expiration_date += add_time
-        else:
-            self.expiration_date = date.today() + add_time
-        self.save()
+def prolong(self, add_months):
+    add_time = timedelta(days=31)*add_months
+    if self.expiration_date:
+        self.expiration_date += add_time
+    else:
+        self.expiration_date = date.today() + add_time
+    self.save()
 
