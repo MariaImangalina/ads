@@ -10,8 +10,9 @@ User = auth.get_user_model()
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    expiration_date = models.DateField(default=(date.today()-timedelta(days=1))) #ПОПРАВИТЬ
+    expiration_date = models.DateField(default=(date.today()-timedelta(days=1))) #по умолчанию день до регистрации. Ибо пока не оплатил))
     paid = models.BooleanField(default=False)
+    comment = models.CharField(max_length=1000, verbose_name='Комментарий', blank=True) #для админа
 
     def __str__(self):
         return self.user.username

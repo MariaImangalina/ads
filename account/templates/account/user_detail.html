@@ -2,26 +2,28 @@
 
 {% block content %}
 
+<div class='container'>
+    <div class='jumbotron'>
 
-<h1>{{ user.username }}</h1>
-<br>
-<br>
+        <h1>{{ user.username }}</h1>
+        <br>
 
-{% if user.userprofile.paid %}
-<h4>Текущий статус: Активен</h4>
-<br>
-<h4>Профиль активен до: {{ user.userprofile.expiration_date }}</h4>
+        {% if user.profile.paid %}
+        <h4>Текущий статус: Активен</h4>
+        <h4>Профиль активен до: {{ user.profile.expiration_date }}</h4>
 
-{% else %}
-<h4>Текущий статус: Неактивен</h4>
+        {% else %}
+        <h4>Текущий статус: Неактивен</h4>
+        {% endif %}
+    </div>
 
-{% endif %}
 <br>
-<h4>Ваши полигоны:</h4>
-<a href="{% url 'data:map' %}" role='button' class='btn btn-primary' >Добавить полигон</a>
+<h5>Добавить полигон:</h5>
+<a href="{% url 'data:map' %}" role='button' class='btn btn-primary' >Карта</a>
+<a href="{% url 'data:import' %}" role='button' class='btn btn-primary' >Импорт JSON</a>
 <br>
 <br>
-
+<h5>Ваши полигоны:</h5>
 <form action="{% url 'data:search' %}">
     <input name='q' type="text" placeholder="Search...">
     <input type="submit" class='btn btn-primary btn-sm' value='Найти'>
@@ -63,6 +65,7 @@
 
     
 </table>
+</div>
 </div>
 
 

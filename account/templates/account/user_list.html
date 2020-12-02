@@ -2,9 +2,12 @@
 
 {% block content %}
 
-<br>
+<a href="{% url 'account:check_payment' %}" class='btn btn-info btn-lg'>Check Status</a>
+
+<br><br>
+
 <table class='table thead-light'>
-    <caption><a href="{% url 'account:check_payment' %}" class='btn btn-info'>Check Status</a></caption>
+
     <thead class='thead-light'>
         <tr>
             <th scope='col'>#</th>
@@ -12,6 +15,7 @@
             <th scope='col'>Количество<br>полигонов</th>
             <th scope='col'>Дата истечения<br>подписки</th>
             <th scope='col'>Оплачено</th>
+            <th scope='col'>Комментарий</th>
         </tr>
     </thead>
         {% for user in user_list %}
@@ -21,6 +25,7 @@
             <td>{{ user.polygon.count }}</td>
             <td>{{ user.profile.expiration_date }}</td>
             <td class='is_paid'>{{ user.profile.paid }}</td>
+            <td>{{ user.profile.comment }}</td>
         </tr>
         {% endfor %}
     
