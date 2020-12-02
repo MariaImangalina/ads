@@ -9,15 +9,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.views import generic
 from django.db.models import Q
+from django.core.mail import EmailMessage
 
-from .forms import PolygonForm, SearchPolygon
+from .forms import PolygonForm, SearchPolygon, PolygonImportForm
 from .models import Polygon
 from ads.secret import db_user, db_password
 
+import json
 import psycopg2
 import pandas as pd
 from datetime import datetime, timedelta
-from django.core.mail import EmailMessage
 
 
 User=get_user_model()
@@ -25,7 +26,7 @@ User=get_user_model()
 #######____РАБОЧИЕ ФУНКЦИИ, НЕ VIEWS_______
 
 #_______преобразуем координаты из Array в формат запроса SQL______
-def to_sql_format(coordinates):
+def array_to_sql(coordinates):
     cor = [i.strip('),').replace(', ', ' ').strip() for i in coordinates.split('LatLng(')[1:]]
     cor1 = [i.split(' ') for i in (cor + [cor[0]])]
     for i in cor1:
@@ -33,6 +34,21 @@ def to_sql_format(coordinates):
     cor2 = [' '.join(i) for i in cor1]
     cor3 = ','.join(cor2)
     return cor3
+
+
+#_______преобразуем координаты из json в формат запроса SQL______
+def json_to_sql(data):
+    x = data['features'][0]['geometry']['coordinates'][0]
+    x_list = []
+    for j in range(len(x)):
+        x_element = [str(i) for i in x[j]]
+        x_list += [','.join(x_element)]
+
+    x2_list = [i.replace(',', ' ') for i in x_list]
+    x3_list = ','.join(x2_list)
+    return x3_list
+
+
 
 #______запрос к базе данных с объявлениями_________________________
 def request_to_db(pol, time):
@@ -65,7 +81,7 @@ def request_to_db(pol, time):
     return df
 
 
-#__________VIEWS________________
+#######__________VIEWS________________
 
 @login_required
 def add_polygon(request):
@@ -73,24 +89,41 @@ def add_polygon(request):
 
     if request.is_ajax and request.method == 'POST':
         formset = PolygonForm(request.POST)
-        print('works here')
 
         if formset.is_valid():
             polygon = formset.save(commit=False)
             polygon.user = request.user
-            polygon.coordinates = to_sql_format(formset.cleaned_data['coordinates'])
+            polygon.coordinates = array_to_sql(formset.cleaned_data['coordinates'])
             polygon.save()
-            print('works!')
+            
         else:
             print(formset.errors)
 
     return render(request, 'data/map.html', {'form':form})
 
 
+@login_required
+def import_polygon(request):
+    form = PolygonImportForm()
+
+    if request.method == 'POST' and 'coord_file' in request.FILES:
+        file_form = PolygonImportForm(request.POST, request.FILES)
+        if file_form.is_valid():
+            polygon = file_form.save(commit=False)
+            polygon.user = request.user
+
+            json_data = json.load(request.FILES['coord_file'])
+            polygon.coordinates = json_to_sql(json_data)
+
+            polygon.save()
+            messages.info(request, 'Полигон сохранен')
+        else:
+            print(file_form.errors)
+
+    return render(request, 'data/polygon_import.html', {'form':form})
 
 
-
-#______________отправка всех с кнопки (для тестирования)______________
+#______________отправка объявлений за месяц с кнопки (для тестирования)______________
 
 @login_required
 def get_df(request):

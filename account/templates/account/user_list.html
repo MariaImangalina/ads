@@ -8,21 +8,25 @@
     <thead class='thead-light'>
         <tr>
             <th scope='col'>#</th>
-            <th scope='col'>Username</th>
-            <th scope='col'>Exp_date</th>
-            <th scope='col'>Is Paid</th>
+            <th scope='col'>Пользователь</th>
+            <th scope='col'>Количество<br>полигонов</th>
+            <th scope='col'>Дата истечения<br>подписки</th>
+            <th scope='col'>Оплачено</th>
         </tr>
     </thead>
         {% for user in user_list %}
         <tr>
             <th scope='row'>{{ forloop.counter }}</td>
             <td>{{ user.username }}</td>
+            <td>{{ user.polygon.count }}</td>
             <td>{{ user.profile.expiration_date }}</td>
-            <td>{{ user.profile.paid }}</td>
+            <td class='is_paid'>{{ user.profile.paid }}</td>
         </tr>
         {% endfor %}
     
 </table>
+
+
 
 
 {% endblock %}

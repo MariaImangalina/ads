@@ -109,3 +109,13 @@ $('#polygon_form').on('submit', (e) => {
     },
   });
 });
+
+
+
+$('td.is_paid').each(function(){
+  if ($(this).text() == 'False') {
+      $(this).css({'color':'red'})
+  }
+})
+  
+

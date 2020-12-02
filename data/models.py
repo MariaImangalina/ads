@@ -15,7 +15,7 @@ class Polygon(models.Model):
 
     name = models.CharField(max_length=250)
     user = models.ForeignKey(User, related_name='polygon', on_delete=models.CASCADE)
-    coordinates = models.CharField(max_length=1500)
+    coordinates = models.CharField(max_length=8000)
     ads_type = models.CharField(max_length=150, choices=ADS_TYPE, blank=True, null=True, verbose_name='Тип объявлений')
     min_area = models.PositiveIntegerField(blank=True, null=True, default=0)
     max_area = models.PositiveIntegerField(blank=True, null=True, default=10000000)

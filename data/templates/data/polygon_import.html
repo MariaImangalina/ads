@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h4>Загрузите файл через форму ниже:</h4>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+
+    <input class='btn btn-primary' type="submit" value='Сохранить'>
+
+</form>
+
+{% endblock %}
