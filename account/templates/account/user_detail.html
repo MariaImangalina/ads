@@ -5,31 +5,38 @@
 <div class='container'>
     <div class='jumbotron'>
 
-        <h1>{{ user.username }}</h1>
+        <h2>{{ user.username }}</h2>
         <br>
 
         {% if user.profile.paid %}
-        <h4>Текущий статус: Активен</h4>
-        <h4>Профиль активен до: {{ user.profile.expiration_date }}</h4>
+        <h5>Текущий статус: Активен</h5>
+        <h5>Профиль активен до: {{ user.profile.expiration_date }}</h5>
 
         {% else %}
-        <h4>Текущий статус: Неактивен</h4>
+        <h5>Текущий статус: Неактивен</h5>
         {% endif %}
     </div>
 
 <br>
-<h5>Добавить полигон:</h5>
+<div class='row'>
+    <div class='col-lg-4'>
+<h6>Добавить полигон:</h6>
 <a href="{% url 'data:map' %}" role='button' class='btn btn-primary' >Карта</a>
 <a href="{% url 'data:import' %}" role='button' class='btn btn-primary' >Импорт JSON</a>
+</div>
 <br>
 <br>
-<h5>Ваши полигоны:</h5>
-<form action="{% url 'data:search' %}">
-    <input name='q' type="text" placeholder="Search...">
-    <input type="submit" class='btn btn-primary btn-sm' value='Найти'>
+<div class='col-lg-5'>
+<br>
+<form action="{% url 'data:search' %}" class='form-inline'>
+
+        <input name='q' type="text" class="form-control" placeholder="Поиск полигона...">
+        <input type="submit" class='btn btn-primary' value='Найти'>
+
 </form>
+</div>
+</div>
 <br>
-<div class='container'>
 <table class='table thead-light'>
     <thead class='thead-light'>
         <tr>
@@ -65,7 +72,6 @@
 
     
 </table>
-</div>
 </div>
 
 

@@ -21,7 +21,7 @@
         {% for user in user_list %}
         <tr>
             <th scope='row'>{{ forloop.counter }}</td>
-            <td>{{ user.username }}</td>
+            <td><a href="{% url 'admin:auth_user_change' user.id %}">{{ user.username }}</a></td>
             <td>{{ user.polygon.count }}</td>
             <td>{{ user.profile.expiration_date }}</td>
             <td class='is_paid'>{{ user.profile.paid }}</td>

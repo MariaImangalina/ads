@@ -1,14 +1,16 @@
 from celery import shared_task
+
 from django.core.mail import EmailMessage
-import datetime
 from django.contrib.auth import get_user_model
+from django.contrib import messages
 
 import os
+import datetime
 import psycopg2
 import pandas as pd
-from ads.secret import db_user, db_password
 
-from settings import MEDIA_DIR
+from ads.secret import db_user, db_password
+from ads.settings import MEDIA_DIR
 from .models import Polygon
 from .views import request_to_db
 
@@ -44,3 +46,17 @@ def clean_media():
                 os.unlink(file_path)
         except Exception as e:
             print(e)
+
+
+@shared_task 
+def get_df_now_task(pk):
+    pol = Polygon.objects.get(pk=pk)
+    df = request_to_db(pol, 'now')
+
+    date = datetime.datetime.today().strftime("%Y-%m-%d-%H.%M.%S")
+    df.to_excel(f'media/xlsx/ads_for_{pol.name}_{date}.xlsx', index=False)
+    
+    msg = EmailMessage(f'Объявления на полигоне {pol.name}', 'что-то', '', [pol.user.email, 'varenik_geo@mail.ru'])
+    msg.content_subtype = "html"
+    msg.attach_file(f'media/xlsx/ads_for_{pol.name}_{date}.xlsx')
+    msg.send(fail_silently=False)

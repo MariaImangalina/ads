@@ -13,6 +13,7 @@ from django.core.mail import EmailMessage
 
 from .forms import PolygonForm, SearchPolygon, PolygonImportForm
 from .models import Polygon
+
 from ads.secret import db_user, db_password
 
 import json
@@ -144,27 +145,6 @@ def get_df(request):
 
 #_______________запрос на разовую выгрузку_____________
 
-@login_required
-def get_df_now(request, pk):
-    pol = Polygon.objects.get(pk=pk)
-    df = request_to_db(pol, 'now')
-
-    date = datetime.today().strftime("%Y-%m-%d-%H.%M.%S")
-    df.to_excel(f'media/xlsx/ads_for_{pol.name}_{date}.xlsx', index=False)
-    
-    msg = EmailMessage(f'Объявления на полигоне {pol.name}', 'что-то', '', [pol.user.email, 'varenik_geo@mail.ru'])
-    msg.content_subtype = "html"
-    msg.attach_file(f'media/xlsx/ads_for_{pol.name}_{date}.xlsx')
-    msg.send(fail_silently=False)
-
-    messages.info(request, 'Выгрузка отправлена на ваш email')
-
-    return redirect('account:userpage', pk=request.user.pk)
-
-
-
-
-
 class DeletePolygon(LoginRequiredMixin, generic.DeleteView):
     model = Polygon
 
@@ -195,3 +175,16 @@ class SearchView(generic.ListView):
         return Polygon.objects.filter(Q(name__icontains=query), user=self.user)
 
 
+from .tasks import get_df_now_task
+
+
+
+
+
+@login_required
+def get_df_celery(request, pk):
+    get_df_now_task.delay(pk)
+
+    messages.info(request, 'Выгрузка отправлена на ваш email')
+
+    return redirect('account:userpage', pk=request.user.pk)
