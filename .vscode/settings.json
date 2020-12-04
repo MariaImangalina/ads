@@ -1,3 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\Varenik\\AppData\\Local\\ESRI\\conda\\envs\\arcgispro-py3-clone\\python.exe"
+    "python.pythonPath": "C:\\Users\\Varenik\\AppData\\Local\\ESRI\\conda\\envs\\arcgispro-py3-clone\\python.exe",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
 }

@@ -17,7 +17,6 @@
         {% endif %}
     </div>
 
-<br>
 <div class='row'>
     <div class='col-lg-4'>
 <h6>Добавить полигон:</h6>
@@ -50,7 +49,7 @@
             <th scope='col'></th>
         </tr>
     </thead>
-        {% for pol in user.polygon.all %}
+        {% for pol in object_list %}
  
         
         <tr>
@@ -72,7 +71,31 @@
 
     
 </table>
+
+
+
+
+{% if is_paginated %}
+<div class="pagination">
+    <span class="page-links">
+        {% if page_obj.has_previous %}
+            <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="page-current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+        {% if page_obj.has_next %}
+            <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}
+
+
+
 </div>
 
 
 {% endblock %}
+
+

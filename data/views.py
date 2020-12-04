@@ -143,7 +143,7 @@ def get_df(request):
 
 
 
-#_______________запрос на разовую выгрузку_____________
+
 
 class DeletePolygon(LoginRequiredMixin, generic.DeleteView):
     model = Polygon
@@ -175,11 +175,10 @@ class SearchView(generic.ListView):
         return Polygon.objects.filter(Q(name__icontains=query), user=self.user)
 
 
+
+#_______________запрос на разовую выгрузку_____________
+
 from .tasks import get_df_now_task
-
-
-
-
 
 @login_required
 def get_df_celery(request, pk):
