@@ -46,6 +46,7 @@
             <th scope='col'>Площадь MAX</th>
             <th scope='col'></th>
             <th scope='col'>Разовая<br>выгрузка<br>за месяц</th>
+            <th scope='col'>Экспорт<br>в GEOJSON</th>
             <th scope='col'></th>
         </tr>
     </thead>
@@ -63,6 +64,8 @@
             
             <td><a href="{% url 'data:get_df_now' pk=pol.pk %}" class='btn btn-primary btn-sm'>Отправить</a></td>
 
+            <td><a href="{% url 'data:export' pk=pol.pk %}" class='btn btn-primary btn-sm'>Загрузить</a></td>
+
             <td><a href="{% url 'data:remove' pk=pol.pk %}" class='btn btn-secondary btn-sm'>Удалить</a></td>
         </tr>
 
@@ -73,22 +76,34 @@
 </table>
 
 
-
-
 {% if is_paginated %}
-<div class="pagination">
-    <span class="page-links">
+<nav aria-label="...">
+  <ul class='pagination justify-content-center'>
         {% if page_obj.has_previous %}
-            <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+          <li class="page-item">
+            <a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+          </li>
+        {% else %}
+          <li class='page-item disabled'>
+            <span>Предыдущая</span>
+          </li>
         {% endif %}
-        <span class="page-current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
+          
+        <li class="page-item active">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </li>
+
         {% if page_obj.has_next %}
-            <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+        <li class="page-item">
+            <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">Следующая</a>
+        </li>
+        {% else %}
+          <li class='page-item disabled'>
+            <span>Следующая</span>
+          </li>
         {% endif %}
-    </span>
-</div>
+    </ul>
+</nav>
 {% endif %}
 
 

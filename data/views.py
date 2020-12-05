@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -48,6 +48,13 @@ def json_to_sql(data):
     x2_list = [i.replace(',', ' ') for i in x_list]
     x3_list = ','.join(x2_list)
     return x3_list
+
+#_______преобразуем координаты из БД для импорта в json__________
+def coordinates_to_json(coordinates):
+    new = []
+    for i in coordinates.split(','):
+        new.append(i.split(' '))
+    return new
 
 
 
@@ -122,6 +129,51 @@ def import_polygon(request):
             print(file_form.errors)
 
     return render(request, 'data/polygon_import.html', {'form':form})
+
+
+
+@login_required
+def export_polygon_to_json(request, pk):
+    pol = Polygon.objects.get(pk=pk)
+    coordinates = coordinates_to_json(pol.coordinates)
+    description = 'Помещения площадью {}-{}м2'.format(pol.min_area, pol.max_area)
+
+    if pol.ads_type == 'Сдам':
+        description + ', тип - аренда'
+    elif pol.ads_type == 'Продам':
+        description + ', тип - продажа'
+
+    dict_data = {'type': 'FeatureCollection',
+                'metadata': {'name': pol.name,
+                'creator': 'Yandex Map Constructor',
+                'description': description},
+                'features': [{'type': 'Feature',
+                'id': 0,
+                'geometry': {'type': 'Polygon',
+                    'coordinates': [coordinates]},
+                'properties': {'fill': '#ed4543',
+                    'fill-opacity': 0.6,
+                    'stroke': '#ed4543',
+                    'stroke-width': '5',
+                    'stroke-opacity': 0.9}}]}
+
+    response = HttpResponse(json.dumps(dict_data), content_type = 'application/json')
+    response['Content-Disposition'] = 'attachment; filename="json_{}.geojson"'.format(pol.name)
+
+    return response
+
+    
+
+
+
+
+
+
+
+
+
+
+
 
 
 #______________отправка объявлений за месяц с кнопки (для тестирования)______________

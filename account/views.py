@@ -22,7 +22,7 @@ class SignUp(generic.CreateView):
 class UserDetail(generic.DetailView, generic.list.MultipleObjectMixin):
     model = User
     template_name = 'account/user_detail.html'
-    paginate_by = 10
+    paginate_by = 20
 
     def get_context_data(self, **kwargs):
         object_list = self.object.polygon.all()
