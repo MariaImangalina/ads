@@ -1,8 +1,43 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% load static %}
 
-<h1>Welcome!</h1>
-<button><a href="{% url 'data:map' %}">Карта</a></button>
+{% block content %}
+<div class='container'>
+    <div class='jumbotron'>
+        <h2 class="display-4">Мониторинг рынка <br>коммерческой недвижимости</h2>
+        <hr class="my-4">
+        <p class='text-muted'>Новые объявления у вас на почте каждый час!</p>
+    </div>
+</div>
+
+<div class="card-deck">
+    <div class="card">
+      <img class="card-img-top" height='100' width='100' src="{% static 'pics/map.svg' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Источник</h5>
+        <p class="card-text">Выделите нужный полигон прямо на карте или загрузите готовый файл с координатами</p>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top" height='100' width='100' src="{% static 'pics/filter.svg' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Фильтры</h5>
+        <p class="card-text">Вы можете настроить тип объявлений и необходимую площадь помещения</p>
+      </div>
+    </div>
+    <div class="card">
+      <img class="card-img-top" height='100' width='100' src="{% static 'pics/profiles.svg' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Объем</h5>
+        <p class="card-text">Количество полигонов неограничено</p>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
 
 {% endblock %}
