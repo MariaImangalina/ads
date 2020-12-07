@@ -225,6 +225,6 @@ def get_df_celery(request, pk):
         get_df_now_task.delay(pk)
         messages.info(request, 'Выгрузка отправлена на ваш email')
     else:
-        messages.info(request, 'Для получения выгрузки нужен оплаченный аккаунт')
+        messages.warning(request, 'Для получения выгрузки нужен оплаченный аккаунт')
 
     return redirect('account:userpage', pk=request.user.pk)

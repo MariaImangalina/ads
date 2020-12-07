@@ -43,8 +43,8 @@
             <th scope='col'>#</th>
             <th scope='col'>Название</th>
             <th scope='col'>Тип объявления</th>
-            <th scope='col'>Площадь MIN</th>
-            <th scope='col'>Площадь MAX</th>
+            <th scope='col'>Площадь MIN<br>м2</th>
+            <th scope='col'>Площадь MAX<br>м2</th>
             <th scope='col'>Изменить</th>
             <th scope='col'>Выгрузка<br>за месяц</th>
             <th scope='col'>Экспорт<br>полигона</th>
@@ -52,8 +52,6 @@
         </tr>
     </thead>
         {% for pol in object_list %}
- 
-        
         <tr>
             <th scope='row'>{{ forloop.counter }}</td>
             <th>{{ pol.name }}</th>
@@ -71,6 +69,12 @@
         </tr>
 
         {% endfor %}
+
+        {% if not object_list %}
+        <tr>
+          <td colspan='9'>У вас пока нет полигонов.</td>
+        </tr>
+        {% endif %}
 
     
 </table>
