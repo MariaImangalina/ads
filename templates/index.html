@@ -12,25 +12,27 @@
 </div>
 
 <div class="card-deck">
-    <div class="card">
+    <div class="card border-light text-center">
       <img class="card-img-top" height='100' width='100' src="{% static 'pics/map.svg' %}" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">Источник</h5>
         <p class="card-text">Выделите нужный полигон прямо на карте или загрузите готовый файл с координатами</p>
+        <a class='btn btn-secondary' href="{% url 'data:map' %}">Перейти на карту</a>
       </div>
+    
     </div>
-    <div class="card">
+    <div class="card border-light text-center">
       <img class="card-img-top" height='100' width='100' src="{% static 'pics/filter.svg' %}" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">Фильтры</h5>
         <p class="card-text">Вы можете настроить тип объявлений и необходимую площадь помещения</p>
       </div>
     </div>
-    <div class="card">
+    <div class="card border-light text-center">
       <img class="card-img-top" height='100' width='100' src="{% static 'pics/profiles.svg' %}" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">Объем</h5>
-        <p class="card-text">Количество полигонов неограничено</p>
+        <p class="card-text">Количество полигонов неограничено<br>Вы оплачиваете только подписку</p>
 
       </div>
     </div>

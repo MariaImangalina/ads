@@ -162,25 +162,12 @@ def export_polygon_to_json(request, pk):
 
     return response
 
-    
 
-
-
-
-
-
-
-
-
-
-
-
-
-#______________отправка объявлений за месяц с кнопки (для тестирования)______________
+#______________отправка объявлений за месяц с кнопки (для тестирования, УДАЛИТЬ)______________
 
 @login_required
 def get_df(request):
-    for pol in Polygon.objects.filter(user__is_active=True):
+    for pol in Polygon.objects.filter(user__profile__paid=True):
         df = request_to_db(pol, 'now')
 
         date = datetime.today().strftime("%Y-%m-%d-%H.%M.%S")
@@ -234,8 +221,10 @@ from .tasks import get_df_now_task
 
 @login_required
 def get_df_celery(request, pk):
-    get_df_now_task.delay(pk)
-
-    messages.info(request, 'Выгрузка отправлена на ваш email')
+    if request.user.profile.paid:
+        get_df_now_task.delay(pk)
+        messages.info(request, 'Выгрузка отправлена на ваш email')
+    else:
+        messages.info(request, 'Для получения выгрузки нужен оплаченный аккаунт')
 
     return redirect('account:userpage', pk=request.user.pk)
